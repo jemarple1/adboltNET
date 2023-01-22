@@ -1,63 +1,74 @@
-<script setup>
-import { ref } from 'vue';
-import { Head, useForm } from '@inertiajs/inertia-vue3';
-import AuthenticationCard from '@/Components/AuthenticationCard.vue';
-import AuthenticationCardLogo from '@/Components/AuthenticationCardLogo.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
-
-const form = useForm({
-    password: '',
-});
-
-const passwordInput = ref(null);
-
-const submit = () => {
-    form.post(route('password.confirm'), {
-        onFinish: () => {
-            form.reset();
-
-            passwordInput.value.focus();
-        },
-    });
-};
-</script>
-
 <template>
-    <Head title="Secure Area" />
+  <Head title="Secure Area" />
 
-    <AuthenticationCard>
-        <template #logo>
-            <AuthenticationCardLogo />
-        </template>
+  <jet-authentication-card>
+    <template #logo>
+      <jet-authentication-card-logo />
+    </template>
 
-        <div class="mb-4 text-sm text-gray-600">
-            This is a secure area of the application. Please confirm your password before continuing.
+    <div class="card-body">
+
+      <div class="mb-2">
+        This is a secure area of the application. Please confirm your password before continuing.
+      </div>
+
+      <jet-validation-errors class="mb-2" />
+
+      <form @submit.prevent="submit">
+        <div class="mb-3">
+          <jet-label for="password" value="Password" />
+          <jet-input id="password" type="password" v-model="form.password" required autocomplete="current-password" autofocus />
         </div>
 
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="password" value="Password" />
-                <TextInput
-                    id="password"
-                    ref="passwordInput"
-                    v-model="form.password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    required
-                    autocomplete="current-password"
-                    autofocus
-                />
-                <InputError class="mt-2" :message="form.errors.password" />
+        <div class="d-flex justify-content-end mt-2">
+          <jet-button class="ms-4" :class="{ 'text-white-50': form.processing }" :disabled="form.processing">
+            <div v-show="form.processing" class="spinner-border spinner-border-sm" role="status">
+              <span class="visually-hidden">Loading...</span>
             </div>
-
-            <div class="flex justify-end mt-4">
-                <PrimaryButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Confirm
-                </PrimaryButton>
-            </div>
-        </form>
-    </AuthenticationCard>
+            
+            Confirm
+          </jet-button>
+        </div>
+      </form>
+    </div>
+  </jet-authentication-card>
 </template>
+
+<script>
+import { defineComponent } from 'vue'
+import { Head } from '@inertiajs/inertia-vue3';
+import JetAuthenticationCard from '@/Jetstream/AuthenticationCard.vue'
+import JetAuthenticationCardLogo from '@/Jetstream/AuthenticationCardLogo.vue'
+import JetButton from '@/Jetstream/Button.vue'
+import JetInput from '@/Jetstream/Input.vue'
+import JetLabel from '@/Jetstream/Label.vue'
+import JetValidationErrors from '@/Jetstream/ValidationErrors.vue'
+
+export default defineComponent({
+  components: {
+    Head,
+    JetAuthenticationCard,
+    JetAuthenticationCardLogo,
+    JetButton,
+    JetInput,
+    JetLabel,
+    JetValidationErrors
+  },
+
+  data() {
+    return {
+      form: this.$inertia.form({
+        password: '',
+      })
+    }
+  },
+
+  methods: {
+    submit() {
+      this.form.post(this.route('password.confirm'), {
+        onFinish: () => this.form.reset(),
+      })
+    }
+  }
+})
+</script>

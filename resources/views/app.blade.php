@@ -3,34 +3,26 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title inertia>{{ config('app.name', 'Laravel') }}</title>
 
         <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700;1,900&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700" rel="stylesheet">
+
+        <!-- Styles -->
+        <link rel="stylesheet" href="{{ mix('css/app.css') }}">
+
         <!-- Scripts -->
-
-        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-54754154-1"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'UA-54754154-1');
-</script>
-
         @routes
-        @vite(['resources/js/app.js', "resources/js/Pages/{$page['component']}.vue"])
-        @inertiaHead
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.26.0/moment.min.js"></script>
+        <script src="{{ mix('js/app.js') }}" defer></script>
     </head>
-    <style>
-            body {
-                font-family: 'Source Sans Pro', sans-serif!important;
-            }
-        </style>
-    <body class="font-sans antialiased">
+    <body class="bg-light">
         @inertia
+
+        @env ('local')
+            <script src="http://localhost:3000/browser-sync/browser-sync-client.js"></script>
+        @endenv
     </body>
 </html>

@@ -24,14 +24,9 @@ Route::get('/', function () {
     ]);
 }); 
 
-Route::get('/hello', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-}); 
+Route::get('/about', function () {
+    return view('welcome');
+});
 
 Route::middleware([
     'auth:sanctum',
